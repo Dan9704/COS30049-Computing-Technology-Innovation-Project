@@ -2,8 +2,6 @@
 
 This guide explains how we configure the project environment, perform data processing, train the model, and use the model for prediction.
 
----
-
 ## **1. Environment Setup**
 
 ### **Using Conda**
