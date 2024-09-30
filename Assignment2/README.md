@@ -1,42 +1,47 @@
+# Assignment 2 - Weather Wizard Team
+
 ## **Project Setup**
 
-This guide explains how we configure the project environment, perform data processing, train the model, and use the model for prediction.
+This guide provides steps to configure the project environment, process data, train the models (Gradient Boosting, Classification, and K-Means Clustering), and use these models for prediction.
+
+---
 
 ## **1. Environment Setup**
 
 ### **Using Conda**
 
-To set up the project environment using Conda, we follow these steps:
+We use Conda for setting up the environment to ensure proper dependency management:
 
 1. **Install Conda**:
-   - We first ensure that Conda is installed on our system. We can download it from [Anaconda](https://www.anaconda.com/products/individual) or use Miniconda.
-   
+   - Ensure Conda is installed. Download it from [Anaconda](https://www.anaconda.com/products/individual) or use Miniconda.
+
 2. **Create a Conda environment**:
-   We create a new Conda environment for the project using the following command:
+   - Create a new Conda environment with Python 3.8:
    ```bash
-   conda create --name crop_yield_prediction python=3.8
+   conda create --name climate_prediction python=3.8
    ```
 
 3. **Activate the environment**:
-   We activate the newly created environment:
+   - Activate the newly created environment:
    ```bash
-   conda activate crop_yield_prediction
+   conda activate climate_prediction
    ```
 
 4. **Install the required dependencies**:
-   We install the necessary Python libraries specified in the project using the following Conda or pip commands:
+   - Install the necessary libraries:
    ```bash
    conda install pandas numpy scikit-learn matplotlib seaborn
-   conda install -c conda-forge imbalanced-learn  # For handling imbalanced datasets (SMOTE)
+   conda install -c conda-forge imbalanced-learn
    ```
 
-5. **Optional**: If we are using Jupyter Notebooks for the project:
+5. **Optional - Jupyter Notebook**:
+   - If Jupyter is needed for data exploration:
    ```bash
    conda install jupyterlab
    ```
 
 6. **Clone the project repository**:
-   If the project code is stored in a repository (e.g., GitHub), we can clone it using:
+   - If the project is on GitHub, clone it:
    ```bash
    git clone <repository-url>
    cd <repository-directory>
@@ -46,113 +51,130 @@ To set up the project environment using Conda, we follow these steps:
 
 ## **2. Data Processing**
 
-### **Processing the Dataset**
+We preprocess the dataset to prepare it for model training.
 
-We begin by processing the dataset to prepare it for analysis and model training. The following steps outline the process:
+### **Steps for Data Processing**:
 
 1. **Load the Dataset**:
-   We load the dataset using Pandas:
+   - Load the dataset using Pandas:
    ```python
    import pandas as pd
-   df = pd.read_csv('path/to/dataset.csv')
+   df = pd.read_csv('path/to/dataset.csv') #this is the raw file after we combine the source files together
    ```
 
 2. **Handle Missing Values**:
-   We check for and handle missing values in the dataset:
+   - Drop missing values:
    ```python
-   # Fill missing numerical values with the mean
-   df.fillna(df.mean(), inplace=True)
-   
-   # Fill missing categorical values with the mode
-   for col in df.select_dtypes(include=['object']).columns:
-       df[col].fillna(df[col].mode()[0], inplace=True)
+   df.dropna(inplace=True)
    ```
 
-3. **Normalize the Data**:
-   We scale the numerical features to ensure consistency in the data using **StandardScaler**:
+3. **Feature Selection & Scaling**:
+   - For **Gradient Boosting**, we select features like `air_temperature`, `dew_point`, `wind_spd`, etc., and scale the data using `StandardScaler`.
    ```python
    from sklearn.preprocessing import StandardScaler
-
    scaler = StandardScaler()
-   df[['Temperature', 'Precipitation', 'CO2 Levels']] = scaler.fit_transform(df[['Temperature', 'Precipitation', 'CO2 Levels']])
+   df[['air_temperature', 'dew_point', 'wind_spd']] = scaler.fit_transform(df[['air_temperature', 'dew_point', 'wind_spd']])
    ```
 
-4. **Feature Engineering**:
-   We create additional features, such as interaction terms between variables, to improve model performance:
-   ```python
-   df['Temp_Precip_Interaction'] = df['Temperature'] * df['Precipitation']
-   ```
-
-5. **Split the Data**:
-   We split the dataset into training and testing sets for model training and evaluation:
+4. **Splitting Data for Training and Testing**:
+   - We split the data into training and testing sets:
    ```python
    from sklearn.model_selection import train_test_split
-
-   X = df[['Temperature', 'Precipitation', 'CO2 Levels', 'Temp_Precip_Interaction']]
-   y = df['Crop Yield']
-
-   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+   X = df[['air_temperature', 'dew_point', 'wind_spd']]
+   y = df['rel-humidity']
+   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
    ```
 
 ---
 
 ## **3. Model Training**
 
-We now train our machine learning model using the processed dataset.
+We apply **Gradient Boosting** for regression tasks and **K-Means Clustering** for grouping similar data points.
 
-### **Linear Regression Example**:
+### **Gradient Boosting**:
 
 1. **Train the Model**:
-   We use **Linear Regression** as our initial model for predicting crop yield:
    ```python
-   from sklearn.linear_model import LinearRegression
-   from sklearn.metrics import mean_squared_error
-
-   # Initialize and train the model
-   model = LinearRegression()
-   model.fit(X_train, y_train)
-
-   # Predict on the test set
-   y_pred = model.predict(X_test)
-
-   # Evaluate the model using Mean Squared Error (MSE)
-   mse = mean_squared_error(y_test, y_pred)
-   print(f'Mean Squared Error: {mse}')
+   from sklearn.ensemble import GradientBoostingRegressor
+   gbr = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=3, random_state=42)
+   gbr.fit(X_train, y_train)
    ```
 
-2. **Alternative Models**:
-   We also experiment with more advanced models such as **Ridge Regression**, **Polynomial Regression**, and **Gradient Boosting** for better performance. See the corresponding sections of the code for these models.
+2. **Evaluate the Model**:
+   ```python
+   from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+   y_pred = gbr.predict(X_test)
+   mse = mean_squared_error(y_test, y_pred)
+   mae = mean_absolute_error(y_test, y_pred)
+   r2 = r2_score(y_test, y_pred)
+   print(f"MSE: {mse:.4f}, MAE: {mae:.4f}, R2: {r2:.4f}")
+   ```
+
+3. **Visualize Results**:
+   ```python
+   import matplotlib.pyplot as plt
+   plt.scatter(y_test, y_pred)
+   plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red')
+   plt.xlabel('Actual Humidity')
+   plt.ylabel('Predicted Humidity')
+   plt.show()
+   ```
 
 ---
 
-## **4. Using the Model for Prediction**
+### **K-Means Clustering**:
 
-Once the model has been trained and evaluated, we can use it for predictions on new or unseen data.
+1. **Train the K-Means Model**:
+   ```python
+   from sklearn.cluster import KMeans
+   kmeans = KMeans(n_clusters=3, random_state=42)
+   kmeans.fit(X_train)
+   labels = kmeans.labels_
+   ```
 
-### **Steps for Prediction**:
+2. **Evaluate Clustering Performance**:
+   ```python
+   from sklearn.metrics import silhouette_score
+   silhouette_avg = silhouette_score(X_train, labels)
+   print(f"Silhouette Score: {silhouette_avg:.4f}")
+   ```
 
-1. **Load the New Data**:
-   We load the new dataset (which must be in the same format as the training data):
+3. **Visualize Clusters**:
+   ```python
+   from sklearn.decomposition import PCA
+   pca = PCA(n_components=2)
+   X_pca = pca.fit_transform(X_train)
+   plt.scatter(X_pca[:, 0], X_pca[:, 1], c=labels, cmap='viridis')
+   plt.xlabel('Principal Component 1')
+   plt.ylabel('Principal Component 2')
+   plt.show()
+   ```
+
+---
+
+## **4. Model Prediction**
+
+### **Steps for Using the Model**:
+
+1. **Load New Data**:
    ```python
    new_data = pd.read_csv('path/to/new_data.csv')
    ```
 
-2. **Preprocess the New Data**:
-   We preprocess the new data similarly to how we processed the training data (handle missing values, normalize, and feature engineer):
+2. **Preprocess New Data**:
+   - Make sure to preprocess the new data using the same scaling as before:
    ```python
-   new_data[['Temperature', 'Precipitation', 'CO2 Levels']] = scaler.transform(new_data[['Temperature', 'Precipitation', 'CO2 Levels']])
-   new_data['Temp_Precip_Interaction'] = new_data['Temperature'] * new_data['Precipitation']
+   new_data[['air_temperature', 'dew_point', 'wind_spd']] = scaler.transform(new_data[['air_temperature', 'dew_point', 'wind_spd']])
    ```
 
 3. **Make Predictions**:
-   We use the trained model to make predictions:
    ```python
-   predictions = model.predict(new_data)
-   print(predictions)
+   new_predictions = gbr.predict(new_data)
+   print(new_predictions)
    ```
 
 ---
 
 ## **Conclusion**
 
-This README has outlined the steps for setting up the environment, processing the data, training the machine learning model, and using the model for predictions. For further experimentation, we can adjust the model and explore additional machine learning algorithms. Make sure to validate the model's performance using cross-validation and tune hyperparameters for better accuracy.
+This guide covers setting up the project environment, processing data, training machine learning models using Gradient Boosting and K-Means Clustering, and making predictions.
