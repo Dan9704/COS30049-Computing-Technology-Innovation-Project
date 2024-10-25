@@ -14,60 +14,15 @@ function Footer() {
       <Row>
         {/* Column for the dev credit */}
         <Col md="4" className="footer-copywright">
-          <h3>Designed and Developed by Danny Nguyen</h3>
+          <h3>Designed and Developed by Weather Wizards Team</h3>
         </Col>
         {/* Column for the copyright in4 */}
         <Col md="4" className="footer-copywright">
-          <h3>Copyright © {2024} Danny</h3>
+          <h3>Copyright © {2024} Weather Wizards Team</h3>
         </Col>
-        {/* Column for the social icons */}
-        <Col md="4" className="footer-body">
-          <ul className="footer-icons">
-            {/* Icon for the GitHub */}
-            <li className="social-icons">
-              <a
-                href="https://github.com/Dan9704"
-                style={{ color: "white" }}
-                target="_blank" 
-                rel="noopener noreferrer"
-              >
-                <AiFillGithub />
-              </a>
-            </li>
-            {/* Icon for the Facebook */}
-            <li className="social-icons">
-              <a
-                href="https://www.facebook.com/profile.php?id=100041760740329"
-                style={{ color: "white" }}
-                target="_blank" 
-                rel="noopener noreferrer"
-              >
-                <AiFillFacebook />
-              </a>
-            </li>
-            {/* Icon for the LinkedIn */}
-            <li className="social-icons">
-              <a
-                href="https://www.linkedin.com/in/duong-danny-nguyen/"
-                style={{ color: "white" }}
-                target="_blank" 
-                rel="noopener noreferrer"
-              >
-                <FaLinkedinIn />
-              </a>
-            </li>
-            {/* Icon for the Instagram */}
-            <li className="social-icons">
-              <a
-                href="https://www.instagram.com/_tnug_dnoug_/"
-                style={{ color: "white" }}
-                target="_blank" 
-                rel="noopener noreferrer"
-              >
-                <AiFillInstagram />
-              </a>
-            </li>
-          </ul>
+        {/* Column for the copyright in4 */}
+        <Col md="4" className="footer-copywright">
+          <h3>Swinburne University of Technology</h3>
         </Col>
       </Row>
     </Container>

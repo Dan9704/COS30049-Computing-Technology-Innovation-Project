@@ -77,41 +77,31 @@ function NavBar() {
               </Nav.Link>
             </Nav.Item>
 
-            {/* Project Link */}
+            {/* AI_Model_Integration Link */}
             <Nav.Item>
               <Nav.Link
                 as={Link}
-                to="/project"
+                to="/ai_model_integration"
                 onClick={() => updateExpanded(false)}
               >
                 <AiOutlineProject
                   style={{ marginBottom: "2px" }}
                 />{" "}
-                Projects
+                AI_Model_Integration
               </Nav.Link>
             </Nav.Item>
 
-            {/* Resume Link */}
+            {/* Data Visualization Link */}
             <Nav.Item>
               <Nav.Link
                 as={Link}
-                to="/resume"
+                to="/data_visualization"
                 onClick={() => updateExpanded(false)}
               >
-                <CgFileDocument style={{ marginBottom: "2px" }} /> Resume
+                <CgFileDocument style={{ marginBottom: "2px" }} /> Data Visualization
               </Nav.Link>
             </Nav.Item>
 
-            {/* Github Button/Link */}
-            <Nav.Item className="github-btn">
-              <Button
-                href="https://github.com/Dan9704"
-                target="_blank"
-                className="github-btn-inner"
-              >
-                <AiFillGithub style={{ fontSize: "1.2em" }} />{" "}
-              </Button>
-            </Nav.Item>
           </Nav>
         </Navbar.Collapse>
       </Container>

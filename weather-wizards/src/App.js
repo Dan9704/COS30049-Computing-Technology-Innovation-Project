@@ -3,9 +3,9 @@ import Preloader from "../src/components/Pre";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home/Home";
 import About from "./components/About/About";
-import Projects from "./components/Projects/Projects";
+import AI_Model_Integration from "./components/AI_Model_Integration/AI_Model_Integration";
 import Footer from "./components/Footer";
-import Resume from "./components/Resume/ResumeNew";
+import Data_Visualization from "./components/Data_Visualization/Data_Visualization";
 import {
   BrowserRouter as Router,
   Route,
@@ -36,9 +36,9 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/project" element={<Projects />} />
+          <Route path="/ai_model_integration" element={<AI_Model_Integration />} />
           <Route path="/about" element={<About />} />
-          <Route path="/resume" element={<Resume />} />
+          <Route path="/data_visualization" element={<Data_Visualization />} />
           <Route path="*" element={<Navigate to="/"/>} />
         </Routes>
         <Footer />
