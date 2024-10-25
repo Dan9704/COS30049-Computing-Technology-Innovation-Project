@@ -2,10 +2,9 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Particle from "../Particle";
 
-function About() {
+function AI_Model_Intergration() {
   return (
-    <Container fluid className="about-section">
-      {/* Particle background effect  */}
+    <Container fluid className="project-section">
       <Particle />
       <Container>
         
@@ -14,4 +13,4 @@ function About() {
   );
 }
 
-export default About;
+export default AI_Model_Intergration;

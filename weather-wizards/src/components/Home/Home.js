@@ -1,7 +1,5 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import homeLogo from "../../Assets/avatar1.png";
-import Tilt from "react-parallax-tilt";
 import Particle from "../Particle";
 
 function Home() {
